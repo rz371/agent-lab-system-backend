@@ -4,18 +4,26 @@ from app.schemas.user import UserResponse
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User
+from app.util.jwt import create_access_token
+from app.util.password import hash_password, verify_password
+
 # 所有关于权限验证的都可以写到这个py里面
 
-router = APIRouter(prefix='/auth',tags=['权限验证'])
+router = APIRouter(prefix="/auth", tags=["权限验证"])
 
-@router.post('/login')
+
+@router.post("/login")
 # Session=Depends(get_db) 依赖注入,自动拿数据库会话db
-async def login(data:LoginRequest,db:Session=Depends(get_db)):
+def login(data: LoginRequest, db: Session = Depends(get_db)):
+    print("登录", data)
     user = db.query(User).filter(User.username == data.username).first()
-    print('有么有',user)
-    # or user.password != data.password
-    if not user :
-        return {'code':400,'message':'账号或密码错误'}
+
+    if not user or not verify_password(data.password, user.password):
+        return {"code": 400, "message": "账号或密码错误"}
+
+    if user.status != 1:
+        return {"code": 403, "message": "账号已被禁用"}
+    token = create_access_token(user.id)
 
     # user 是数据库查出来的ORM对象
     return {
@@ -25,5 +33,5 @@ async def login(data:LoginRequest,db:Session=Depends(get_db)):
         # 等价于:把数据库查出来的数据(ORM对象),交给UserResponse处理,生成一个schema对象,
         # 放到返回的JSON里面 , 做这个也是因为UserResponse里面写了model_config = ConfigDict(from_attributes=True)
         # 不然model_validate()也报错!!
-        "data": UserResponse.model_validate(user),
+        "data": {"token": token, "user": UserResponse.model_validate(user)},
     }

@@ -5,7 +5,6 @@
 # 3、给整个项目提供统一入口拿配置，这样其他py文件就不需要读env文件了，导入这个就能拿到
 
 
-
 from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -16,17 +15,19 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # parent.parent 再上一级  backend/ ，所以如果env不是在这个路径下的话，就要修改
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # BaseSettings：项目配置就要继承它，可以读取.env文件
 class Settings(BaseSettings):
     DATABASE_URL: str
-
+    JWT_SECRET_KEY: str
+    JWT_EXPIRE_HOURS: int
+    JWT_ALGORITHM: str
     # SettingsConfigDict 告诉BaseSettings 用什么样子的规则去加载配置
     # 怎么去读取，去哪里读取
     # model_config 必须得叫这个名字，是pydantic固定协议
     model_config = SettingsConfigDict(
-        env_file=BASE_DIR / '.env', # 到这个文件找环境变量
-        env_file_encoding='utf-8'
-
+        env_file=BASE_DIR / ".env", env_file_encoding="utf-8"  # 到这个文件找环境变量
     )
+
 
 settings = Settings()
