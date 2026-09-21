@@ -2,17 +2,18 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
+
 class UserResponse(BaseModel):
-    id:int
-    create_time:datetime
-    update_time:datetime
-    username:str
-    name:str
-    role:str
-    status:int
+    id: int
+    # create_time:datetime
+    # update_time:datetime
+    username: str
+    name: str
+    role: str
+    status: int
     # 得给一个默认值None，不然BaseModel校验的话就校验必须有值，
     # 会报错
-    email:str | None = None
+    email: str | None = None
     phone: str | None = None
     avatar: str | None = None
 

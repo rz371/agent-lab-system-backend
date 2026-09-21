@@ -26,10 +26,10 @@ app.include_router(api)
 origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_method=["*"],
-    allow_headers=["*"],
-    allow_credentials=True,
+    allow_origins=origins,  # 允许前端访问的接口，不要写 *
+    allow_methods=["*"],  # 所有的请求方法
+    allow_headers=["*"],  # 所有的请求头
+    allow_credentials=True,  # 关键点：允许前端携带 Authorization token
 )
 # 注册全局异常处理器 (按顺序！)
 # 参数1：异常类，

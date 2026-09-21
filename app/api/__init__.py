@@ -1,3 +1,5 @@
+# api文件只管路由！！
+
 # 写这里自动引入了
 
 from fastapi import APIRouter
