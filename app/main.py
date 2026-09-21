@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 
 from app.common.exceptions import (
@@ -12,6 +13,7 @@ from app.common.exceptions import (
     valid_exception_handler,
 )
 
+from app.config import UPLOAD_DIR
 from app.database import Base, engine
 from app.api import api
 
@@ -31,6 +33,8 @@ app.add_middleware(
     allow_headers=["*"],  # 所有的请求头
     allow_credentials=True,  # 关键点：允许前端携带 Authorization token
 )
+
+
 # 注册全局异常处理器 (按顺序！)
 # 参数1：异常类，
 # 参数2：处理函数
@@ -40,6 +44,9 @@ app.add_exception_handler(RequestValidationError, valid_exception_handler)  # 3
 # 这个必须写到最后！
 app.add_exception_handler(Exception, excep_exception_handler)  # 4
 # 1 不是 ，去找2 ，按顺序判断类型
+
+# 静态目录的挂载  http:127.0.0.1:8000/uploads/xxx.jpg
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 
 @app.get("/")

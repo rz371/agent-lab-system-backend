@@ -30,4 +30,12 @@ class Settings(BaseSettings):
     )
 
 
+# 文件上传
+UPLOAD_DIR = BASE_DIR / "uploads"
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+MAX_FILE_SIZE = 100 * 1024 * 1024  # 100M
+
+# 后缀限制
+ALLOW_OPYIONS = [".png", ".jpg", ".jpeg", ".gif", ".pdf"]
+
 settings = Settings()
