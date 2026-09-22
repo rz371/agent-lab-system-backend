@@ -3,7 +3,7 @@ from app.common.response import Response
 from app.database import get_db
 from app.dependencies.auth import get_current_user
 from app.models.user import User
-from app.schemas.user import UserUpdateRequest
+from app.schemas.user import UpdatePasswordRequest, UserUpdateRequest
 from app.services import user_service
 from sqlalchemy.orm import Session
 
@@ -29,4 +29,15 @@ def update_user_info(
     校验token，就是Depends(get_current_user)
     """
     res = user_service.update_user_info(db, current_user, data)
+    return Response.success(data=res)
+
+
+@router.put("/password")
+def update_password(
+    data: UpdatePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """修改密码"""
+    res = user_service.update_pwd(db, current_user, data)
     return Response.success(data=res)
