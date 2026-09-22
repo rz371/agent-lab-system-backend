@@ -22,3 +22,10 @@ class UserResponse(BaseModel):
     # from_attributes=True 开启后,pydantic会自动读ORM对象
     # 注意:如果后端给前端返回数据了,而且这个数据是从数据库ORM来的,就要加这行
     model_config = ConfigDict(from_attributes=True)
+
+
+class UserUpdateRequest(BaseModel):
+    name: str | None = None
+    avatar: str | None = None
+    phone: str | None = None
+    email: str | None = None

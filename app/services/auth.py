@@ -10,7 +10,7 @@ from app.util.jwt import create_access_token
 from app.util.password import hash_password, verify_password
 
 
-def login(data: LoginRequest, db: Session = Depends(get_db)):
+def login(data: LoginRequest, db: Session):
     print("登录", data)
     user = db.query(User).filter(User.username == data.username).first()
 
@@ -27,7 +27,7 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
     return LoginResponse(token=token, user=UserResponse.model_validate(user))
 
 
-def register(data: RegisterRequest, db: Session = Depends(get_db)):
+def register(data: RegisterRequest, db: Session):
     # 先看看有没有账号吧
     user = db.query(User).filter(data.username == User.username).first()
     if not user:

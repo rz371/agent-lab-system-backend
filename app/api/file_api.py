@@ -1,11 +1,11 @@
 import os
 import shutil
-from time import time
-from uuid import uuid4
+import time
+import uuid
 
-from anyio import Path
-from fastapi import APIRouter, UploadFile
-from pydantic import Field
+from pathlib import Path
+from fastapi import APIRouter, File, UploadFile
+
 
 from app.common.exceptions import BusinessException
 from app.common.response import Response
@@ -16,7 +16,7 @@ router = APIRouter(prefix="/files", tags=["文件管理"])
 
 
 @router.post("/upload")
-def upload_files(file: UploadFile = Field(...)):
+def upload_files(file: UploadFile = File(...)):
     """文件上传接口"""
 
     # 判断有无名称
@@ -39,7 +39,7 @@ def upload_files(file: UploadFile = Field(...)):
     # 没问题了，要存储到磁盘了
     # 存储的名称要随机性，如果一样的话，会覆盖掉
     # time.time拿到秒，变为毫秒
-    disk_name = f"{int(time.time() * 1000)}_{uuid4.hex[:8]}{ext}"
+    disk_name = f"{int(time.time() * 1000)}_{uuid.uuid4().hex[:8]}{ext}"
 
     # 存储刚才的文件里面 -- 流式存储
     save_path = UPLOAD_DIR / disk_name  # 文件实际存储的路径

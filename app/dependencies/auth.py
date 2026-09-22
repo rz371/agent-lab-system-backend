@@ -24,5 +24,4 @@ def get_current_user(
         raise HTTPException(status_code=401, detail="无效的登录凭证")
 
     user = db.query(User).filter(User.id == user_id).first()
-    print(user)
     return user
