@@ -34,3 +34,14 @@ class UserUpdateRequest(BaseModel):
 class UpdatePasswordRequest(BaseModel):
     old_pwd: str
     new_pwd: str
+
+
+class UserInfoPageRequest(BaseModel):
+    """
+    用户信息页面的请求
+    页码，页数，根据什么字段进行查询
+    """
+
+    size: int
+    page: int
+    keyword: str | None = None

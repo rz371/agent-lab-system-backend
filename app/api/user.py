@@ -11,7 +11,7 @@ router = APIRouter(prefix="/user", tags=["用户"])
 
 
 @router.get("/info")
-def get_user_info(user: str = Depends(get_current_user)):
+def get_user_info(user: User = Depends(get_current_user)):
     """获取当前登录用户信息"""
     res = user_service.get_userinfo(user)
     return Response.success(data=res)

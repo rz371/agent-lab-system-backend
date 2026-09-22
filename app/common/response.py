@@ -17,3 +17,10 @@ class Response(BaseModel):
     @classmethod
     def error(cls, code: int = 500, message: str = "请求失败"):
         return cls(code=code, message=message)
+
+
+class pageResponse(BaseModel):
+    """分页统一返回格式"""
+
+    list: Any = []
+    total: int = 0

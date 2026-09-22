@@ -1,9 +1,10 @@
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+from app.common.exceptions import BusinessException
 from app.database import get_db
 from app.models.user import User
-from app.util.jwt import create_access_token, decode_access_token
+from app.util.jwt import decode_access_token
 
 # 意思是如果前端没有token，那么就去这个接口获取
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="/auth/login")
@@ -25,3 +26,11 @@ def get_current_user(
 
     user = db.query(User).filter(User.id == user_id).first()
     return user
+
+
+def get_current_admin(current_user: User = Depends(get_current_user)):
+    """只有role是admin才能看"""
+
+    if current_user.role != "admin":
+        raise BusinessException(message="该用户无权限访问", code=403)
+    return current_user
