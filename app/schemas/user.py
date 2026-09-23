@@ -5,8 +5,6 @@ from pydantic import BaseModel, ConfigDict
 
 class UserResponse(BaseModel):
     id: int
-    # create_time:datetime
-    # update_time:datetime
     username: str
     name: str
     role: str
@@ -48,7 +46,7 @@ class UserInfoPageRequest(BaseModel):
 
 
 class UserCreateRequest(BaseModel):
-    """用户新增"""
+    """管理员-用户新增"""
 
     username: str
     password: str = "123"
@@ -65,8 +63,6 @@ class UserUpdateRequest(BaseModel):
 
     user_id: int
     password: str | None = None
-    role: str | None = None
-    status: int | None = None
     name: str | None = None
     avatar: str | None = None
     email: str | None = None
@@ -74,4 +70,6 @@ class UserUpdateRequest(BaseModel):
 
 
 class UserDeleteRequest(BaseModel):
+    """管理员-用户删除"""
+
     user_id: int

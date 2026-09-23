@@ -79,7 +79,11 @@ def update_user_se(data: UserUpdateRequest, db: Session):
     user = db.query(User).filter(User.id == data.user_id).first()
     if not user:
         raise BusinessException(message="用户不存在")
-    items = data.model_dump(exclude_none=True)  # 只取真正传值的
+    items = data.model_dump(
+        # 在管理员进行用户编辑的话，可以包含"role", "status"
+        exclude_none=True,
+        exclude={"role", "status"},
+    )  # 只取真正传值的
     for key, value in items.items():
         setattr(user, key, value)
 
