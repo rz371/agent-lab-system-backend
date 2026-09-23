@@ -45,3 +45,33 @@ class UserInfoPageRequest(BaseModel):
     size: int
     page: int
     keyword: str | None = None
+
+
+class UserCreateRequest(BaseModel):
+    """用户新增"""
+
+    username: str
+    password: str = "123"
+    role: str = "student"
+    status: int = 1
+    name: str | None = None
+    avatar: str | None = None
+    email: str | None = None
+    phone: str | None = None
+
+
+class UserUpdateRequest(BaseModel):
+    """用户编辑"""
+
+    user_id: int
+    password: str | None = None
+    role: str | None = None
+    status: int | None = None
+    name: str | None = None
+    avatar: str | None = None
+    email: str | None = None
+    phone: str | None = None
+
+
+class UserDeleteRequest(BaseModel):
+    user_id: int
