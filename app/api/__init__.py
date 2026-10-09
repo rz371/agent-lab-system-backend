@@ -7,6 +7,7 @@ from app.api.auth import router as auth_router
 from app.api.user import router as user_router
 from app.api.file_api import router as file_router
 from app.api.lab import router as lab_router
+from app.api.equipment import router as equip_router
 from app.api.userManage_api import router as useManage_router
 
 api = APIRouter()
@@ -14,4 +15,5 @@ api.include_router(auth_router)
 api.include_router(user_router)
 api.include_router(file_router)
 api.include_router(lab_router)
+api.include_router(equip_router)
 api.include_router(useManage_router)

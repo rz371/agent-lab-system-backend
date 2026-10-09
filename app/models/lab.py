@@ -13,7 +13,7 @@ class LabStatus(enum.Enum):
 
 
 class Lab(Base):
-    __tablename__ = "lab"
+    __tablename__ = "labs"
     __table_args__ = {"comment": "实验室信息表"}
 
     # str是强类型标注，在sqlalchemy中，类型标注决定了是否可以为Null，除非显式的加上nullable=True，才是可以为空的
