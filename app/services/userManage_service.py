@@ -27,6 +27,7 @@ def get_user_manager_all(data: UserInfoPageRequest, db: Session):
             # 多关键字查询用or_
             # SQL 用OR
             or_(
+                # like区分大小写，ilike不区分大小写
                 User.username.like(f"%{data.keyword}%"),
                 User.name.like(f"%{data.keyword}%"),
             )
@@ -80,10 +81,12 @@ def update_user_se(data: UserUpdateRequest, db: Session):
     if not user:
         raise BusinessException(message="用户不存在")
     items = data.model_dump(
-        # 在管理员进行用户编辑的话，可以包含"role", "status"
+        # 只取真正传值的
         exclude_none=True,
+        # 在管理员进行用户编辑的话，
+        # 强制排除掉role和status字段，避免修改用户的角色和状态
         exclude={"role", "status"},
-    )  # 只取真正传值的
+    )
     for key, value in items.items():
         setattr(user, key, value)
 

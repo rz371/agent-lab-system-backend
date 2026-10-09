@@ -22,13 +22,6 @@ class UserResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class UserUpdateRequest(BaseModel):
-    name: str | None = None
-    avatar: str | None = None
-    phone: str | None = None
-    email: str | None = None
-
-
 class UpdatePasswordRequest(BaseModel):
     old_pwd: str
     new_pwd: str

@@ -19,6 +19,7 @@ from app.api import api
 
 # 导入 User 是为了告诉程序我有这个表，记得去创建
 from app.models.user import User
+from app.models.lab import Lab
 
 Base.metadata.create_all(bind=engine)  # 自动创建表
 
