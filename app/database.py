@@ -7,14 +7,15 @@ from app.config import settings
 
 # 第一步：把数据库地址拿到放到引擎里面 - 引擎是SQLAlchemy的核心对象
 #           负责管理数据库驱动和连接池的 ，目前只是初始配置
-engine = create_engine(settings.DATABASE_URL) # 创建引擎
+engine = create_engine(settings.DATABASE_URL)  # 创建引擎
 
 # 第二步：只要调用一次 SessionLocal ，那么就是一次session
-SessionLocal = sessionmaker( # 配置会话工厂
-        bind=engine,
-        autocommit=False, 
-        autoflush=False, 
-    )
+SessionLocal = sessionmaker(  # 配置会话工厂
+    bind=engine,
+    autocommit=False,
+    autoflush=False,
+)
+
 
 # 第三步：真正的创建连接 ,get_db 是规则，真正创建连接的是db = SessionLocal()
 def get_db():
@@ -24,6 +25,7 @@ def get_db():
     finally:
         db.close()
 
+
 # 普通写法  Base = declarative_base()
 #
 # 给 Base新加两个字段，以后继承这个的话，自动有这俩字段
@@ -32,8 +34,11 @@ def get_db():
 class Base(DeclarativeBase):
     # Mapped[] 就得这么写，是类型标注
     # mapped_column 这一列的细节配置
-    id:Mapped[int] = mapped_column(primary_key=True,comment='主键ID')
+    id: Mapped[int] = mapped_column(primary_key=True, comment="主键ID", sort_order=-1)
     # DateTime ： 建表的时候，`create_time`这一列，给我建成**时间类型 DATETIME**，不要存成普通字符串、数字。
-    create_time:Mapped[datetime] = mapped_column(DateTime,default=datetime.now,comment='创建时间')
-    update_time:Mapped[datetime] = mapped_column(
-        DateTime,default=datetime.now,onupdate=datetime.now,comment='更新时间')
+    create_time: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.now, comment="创建时间"
+    )
+    update_time: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.now, onupdate=datetime.now, comment="更新时间"
+    )

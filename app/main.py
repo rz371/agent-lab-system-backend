@@ -21,6 +21,7 @@ from app.api import api
 from app.models.user import User
 from app.models.lab import Lab
 from app.models.equipment import Equipment
+from app.models.reservation import Reservation
 
 Base.metadata.create_all(bind=engine)  # 自动创建表
 
