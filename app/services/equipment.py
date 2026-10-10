@@ -31,7 +31,7 @@ def get_equipment_manager_all(data: EquipmentPageRequest, db: Session):
         .limit(data.size)
         .all()
     )
-    print("33", items)
+
     result = []
     for item in items:
         # 可以写EquipmentResponse.model_validate 这个前提是
@@ -46,9 +46,6 @@ def get_equipment_manager_all(data: EquipmentPageRequest, db: Session):
 
 def create_equipment(data: EquipmentCreateRequest, db: Session):
     """新增设备"""
-    lab = db.query(Lab).filter(Lab.id == data.lab_id).first()
-    if not lab:
-        raise BusinessException(message="所属实验室不存在")
     exist = (
         db.query(Equipment)
         .filter(
@@ -114,3 +111,14 @@ def delete_equipment(data: EquipmentDeleteRequest, db: Session):
     db.delete(exist)
     db.commit()
     return "删除成功"
+
+
+def desc_equipment(lab_id: int, page: int, size: int, db: Session):
+    """根据lab_id，可以拿到对应的实验室设备"""
+    query = db.query(Equipment)
+    query = query.filter(Equipment.lab_id == lab_id)
+    total = query.count()
+    items = query.offset((page - 1) * size).limit(size).all()
+    return pageResponse(
+        total=total, list=[EquipmentResponse.model_validate(item) for item in items]
+    )

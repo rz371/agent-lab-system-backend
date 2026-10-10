@@ -1,9 +1,12 @@
+from operator import or_
+
 from app.common.exceptions import BusinessException
 from app.common.response import pageResponse
 from app.models.lab import Lab
 from app.schemas.lab import (
     LabCreateRequest,
     LabDeleteRequest,
+    LabDescRequest,
     LabPageRequest,
     LabResponse,
     LabUpdateRequest,
@@ -74,3 +77,12 @@ def delete_lab(data: LabDeleteRequest, db: Session):
     db.delete(exist)
     db.commit()
     return "已成功删除"
+
+
+def desc_lab(lab_id: int, db: Session):
+    """通过实验室id获取实验室详情数据"""
+    lab = db.query(Lab).filter(Lab.id == lab_id).first()
+    if not lab:
+        raise BusinessException(message="该实验室不存在")
+
+    return LabResponse.model_validate(lab)

@@ -2,11 +2,12 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.common.response import Response
 from app.database import get_db
-from app.dependencies.auth import get_current_admin
+from app.dependencies.auth import get_current_admin, get_current_user
 from app.models.lab import Lab
 from app.schemas.lab import (
     LabCreateRequest,
     LabDeleteRequest,
+    LabDescRequest,
     LabPageRequest,
     LabUpdateRequest,
 )
@@ -18,7 +19,8 @@ router = APIRouter(prefix="/lab", tags=["实验室管理"])
 @router.get("/info")
 def get_lab_info(
     data: LabPageRequest = Depends(),
-    current_user: Lab = Depends(get_current_admin),
+    # 学生身份也可以访问这个接口！！
+    current_user: Lab = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """获取实验室信息"""
@@ -57,3 +59,16 @@ def delete_lab(
     """删除实验室"""
     lab_service.delete_lab(data, db)
     return Response.success(message="删除成功")
+
+
+# 路径带参数，那么这个参数就不能用模型
+@router.get("/desc/{lab_id}")
+def desc_lab(
+    lab_id: int,
+    current_user: Lab = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """通过实验室id获取实验室详情数据"""
+    print("进入", lab_id)
+    res = lab_service.desc_lab(lab_id, db)
+    return Response.success(data=res)

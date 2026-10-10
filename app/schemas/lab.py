@@ -58,3 +58,9 @@ class LabPageRequest(BaseModel):
     size: int
     page: int
     keyword: str | None = None
+
+
+class LabDescRequest(BaseModel):
+    """实验室详情"""
+
+    lab_id: int
